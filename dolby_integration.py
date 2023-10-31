@@ -125,5 +125,10 @@ def download_results():
     return "success!"
 
 
+@app.route("/healthCheck")
+def hello_world():
+    return 'All good'
+
+
 if __name__ == '__main__':
     app.run(port=8080)
