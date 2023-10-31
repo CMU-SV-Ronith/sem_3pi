@@ -1,11 +1,7 @@
 import json
-import os
 import shutil
 
 import requests
-from flask import Flask
-
-app = Flask(__name__)
 
 bearer_auth_token = ""
 DOLBY_OUTPUT_LOCATION = "dlb://out/example-metadata.json"
@@ -36,7 +32,6 @@ def fetch_access_token():
     return bearer_auth_token
 
 
-@app.route('/analyseSpeech/<s3_reference>', methods=['GET'])
 def analyse_speech(s3_reference):
     global bearer_auth_token
 
@@ -67,7 +62,6 @@ def analyse_speech(s3_reference):
     return job_id
 
 
-@app.route('/getJobStatus/<job_id>', methods=['GET'])
 def get_job_status(job_id):
     global bearer_auth_token
 
@@ -96,7 +90,6 @@ def get_job_status(job_id):
     return response.json()
 
 
-@app.route('/downloadResults/', methods=['GET'])
 def download_results():
     print("fetching Dolby access token")
     try:
@@ -124,11 +117,3 @@ def download_results():
 
     return "success!"
 
-
-@app.route("/healthCheck")
-def hello_world():
-    return 'All good'
-
-
-if __name__ == '__main__':
-    app.run(port=8080)
