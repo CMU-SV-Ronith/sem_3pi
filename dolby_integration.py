@@ -98,7 +98,6 @@ def get_job_status(job_id):
 
 @app.route('/downloadResults/', methods=['GET'])
 def download_results():
-
     print("fetching Dolby access token")
     try:
         bearer_auth_token = fetch_access_token()
@@ -127,4 +126,4 @@ def download_results():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=8080)
