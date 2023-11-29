@@ -1,3 +1,4 @@
+
 import json
 import os
 import shutil
@@ -17,7 +18,6 @@ CORS(app)
 def analyse_speech():
     data = request.get_json()
     s3_reference = data.get('input')
-
     return dolby_integration.analyse_speech(s3_reference)
 
 
