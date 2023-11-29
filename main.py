@@ -8,8 +8,9 @@ from openai_text_analyzer import openai_complete
 app = Flask(__name__)
 
 
-@app.route('/analyseSpeech/<s3_reference>', methods=['GET'])
-def analyse_speech(s3_reference):
+@app.route('/analyseSpeech', methods=['GET'])
+def analyse_speech():
+    s3_reference = request.args.get('s3_reference')
     return dolby_integration.analyse_speech(s3_reference)
 
 

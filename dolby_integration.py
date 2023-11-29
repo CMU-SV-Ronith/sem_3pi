@@ -50,7 +50,7 @@ def analyse_speech(s3_reference):
     }
 
     body = {
-        "input": "https://dolbyio.s3-us-west-1.amazonaws.com/public/shelby/indoors.original.mp4",
+        "input": s3_reference,
         "output": DOLBY_OUTPUT_LOCATION
     }
 
