@@ -1,7 +1,7 @@
 import json
 import os
 import shutil
-
+from flask_cors import CORS
 import requests
 from flask import Flask, request, make_response
 
@@ -10,10 +10,14 @@ import whisper_api_integration
 from openai_text_analyzer import openai_complete
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/analyseSpeech/<s3_reference>', methods=['GET'])
-def analyse_speech(s3_reference):
+@app.route('/analyseSpeech', methods=['POST'])
+def analyse_speech():
+    data = request.get_json()
+    s3_reference = data.get('input')
+
     return dolby_integration.analyse_speech(s3_reference)
 
 
@@ -22,8 +26,8 @@ def get_job_status(job_id):
     return dolby_integration.get_job_status(job_id)
 
 
-@app.route('/downloadResults/', methods=['GET'])
-def download_results():
+@app.route('/getResults/', methods=['GET'])
+def get_results():
     return dolby_integration.download_results()
 
 

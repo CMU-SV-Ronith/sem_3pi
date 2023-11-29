@@ -1,12 +1,12 @@
 import json
 import shutil
-
+import os
 import requests
 
 bearer_auth_token = ""
 DOLBY_OUTPUT_LOCATION = "dlb://out/example-metadata.json"
-APP_KEY = "DJ6SMpz66xDdcFhJCD3kbw=="
-APP_SECRET = "-SvLt35dRZSG_CBtObReSenvbHgaIJgQZGaHtPBbtwY="
+APP_KEY = "VcFmdohP1JtHZKIjb0MR1g=="
+APP_SECRET = "DQaaIIggfBqh_6B2qMvPOI9sV5cACqEoexoze3-QnRE="
 analyse_speech_url = "https://api.dolby.com/media/analyze/speech"
 
 
@@ -27,7 +27,7 @@ def fetch_access_token():
     )
     body = json.loads(response.content)
     bearer_auth_token = body['access_token']
-    print(bearer_auth_token)
+    # print(bearer_auth_token)
 
     return bearer_auth_token
 
@@ -50,7 +50,7 @@ def analyse_speech(s3_reference):
     }
 
     body = {
-        "input": "https://dolbyio.s3-us-west-1.amazonaws.com/public/shelby/indoors.original.mp4",
+        "input": s3_reference,
         "output": DOLBY_OUTPUT_LOCATION
     }
 
@@ -91,7 +91,7 @@ def get_job_status(job_id):
 
 
 def download_results():
-    print("fetching Dolby access token")
+    # print("fetching Dolby access token")
     try:
         bearer_auth_token = fetch_access_token()
     except Exception:
@@ -107,13 +107,12 @@ def download_results():
     args = {
         "url": DOLBY_OUTPUT_LOCATION,
     }
-    local_output_path = "/Users/ronithreddy/Desktop/output.json"
+    # local_output_path = "output.json"
+    data = None
     with requests.get(url, params=args, headers=headers, stream=True) as response:
+        print(response)
         response.raise_for_status()
         response.raw.decode_content = True
-        print("Downloading from {0} into {1}".format(response.url, local_output_path))
-        with open(local_output_path, "wb") as output_file:
-            shutil.copyfileobj(response.raw, output_file)
-
-    return "success!"
-
+        # Code to get the JSON object stored at "response.url" and return it in JSON form
+        data = requests.get(response.url, stream=True)
+    return data.json()
